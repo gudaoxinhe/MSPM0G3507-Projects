@@ -1,0 +1,37 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "MSPM0G350X" --part "Default" --package "LQFP-64(PM)" --product "mspm0_sdk@2.05.00.05"
+ * @v2CliArgs --device "MSPM0G3507" --package "LQFP-64(PM)" --product "mspm0_sdk@2.05.00.05"
+ * @versions {"tool":"1.24.0+4150"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const DAC12  = scripting.addModule("/ti/driverlib/DAC12");
+const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+DAC12.dacAmplifier       = "ON";
+DAC12.dacOutputPinEn     = true;
+DAC12.OutPinConfig.$name = "ti_driverlib_gpio_GPIOPinGeneric0";
+
+const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
+
+SYSCTL.forceDefaultClkConfig = true;
+SYSCTL.MFPCLKEn              = true;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+DAC12.peripheral.$suggestSolution          = "DAC0";
+DAC12.peripheral.OutPin.$suggestSolution   = "PA15";
+Board.peripheral.$suggestSolution          = "DEBUGSS";
+Board.peripheral.swclkPin.$suggestSolution = "PA20";
+Board.peripheral.swdioPin.$suggestSolution = "PA19";
+SYSCTL.peripheral.$suggestSolution         = "SYSCTL";

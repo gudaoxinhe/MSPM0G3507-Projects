@@ -1,0 +1,52 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "MSPM0G350X" --part "Default" --package "LQFP-64(PM)" --product "mspm0_sdk@2.05.00.05"
+ * @v2CliArgs --device "MSPM0G3507" --package "LQFP-64(PM)" --product "mspm0_sdk@2.05.00.05"
+ * @versions {"tool":"1.24.0+4150"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const GPIO   = scripting.addModule("/ti/driverlib/GPIO", {}, false);
+const GPIO1  = GPIO.addInstance();
+const PWM    = scripting.addModule("/ti/driverlib/PWM", {}, false);
+const PWM1   = PWM.addInstance();
+const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+GPIO1.$name                          = "GPIO_BUTTON";
+GPIO1.port                           = "PORTB";
+GPIO1.associatedPins[0].$name        = "PIN_S2";
+GPIO1.associatedPins[0].assignedPort = "PORTB";
+GPIO1.associatedPins[0].assignedPin  = "21";
+
+const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
+
+PWM1.$name                   = "PWM_0";
+PWM1.pwmMode                 = "EDGE_ALIGN_UP";
+PWM1.PWM_CHANNEL_0.$name     = "ti_driverlib_pwm_PWMTimerCC0";
+PWM1.PWM_CHANNEL_0.dutyCycle = 30;
+PWM1.PWM_CHANNEL_1.$name     = "ti_driverlib_pwm_PWMTimerCC1";
+PWM1.PWM_CHANNEL_1.dutyCycle = 90;
+PWM1.ccp0PinConfig.$name     = "ti_driverlib_gpio_GPIOPinGeneric0";
+PWM1.ccp1PinConfig.$name     = "ti_driverlib_gpio_GPIOPinGeneric1";
+PWM1.peripheral.$assign      = "TIMG0";
+
+SYSCTL.forceDefaultClkConfig = true;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+GPIO1.associatedPins[0].pin.$suggestSolution = "PB21";
+Board.peripheral.$suggestSolution            = "DEBUGSS";
+Board.peripheral.swclkPin.$suggestSolution   = "PA20";
+Board.peripheral.swdioPin.$suggestSolution   = "PA19";
+PWM1.peripheral.ccp0Pin.$suggestSolution     = "PA12";
+PWM1.peripheral.ccp1Pin.$suggestSolution     = "PA13";
+SYSCTL.peripheral.$suggestSolution           = "SYSCTL";
